@@ -1,0 +1,194 @@
+<MainWid>
+    canvas:
+        Color:
+            rgb: 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<StartWid>
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgb: .3, .3, .9
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        size_hint_y: .45
+    Button:
+        text: 'Kreiranje / ulazak u bazu'
+        size_hint_y: .1
+        on_press: root.create_database()
+    BoxLayout:
+        size_hint_y: .45
+<DatabaseWid>
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgb: .3, .3, .9
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+
+    ScrollView:
+        size: self.size
+        GridLayout:
+            id: container
+            padding: [10,10,10,10]
+            spacing: 5
+            size_hint_y: None
+            cols: 1
+
+            row_default_height: root.height * 0.2
+            height: self.minimum_height
+
+<NewDataButton>
+    font_size: self.height * 0.5
+    text: '+'
+    on_press: root.create_new_product()
+
+<LeftLabel@Label>
+    size_hint_x: .3
+    text_size: self.size
+    halign: 'left'
+<InsertDataWid>
+    orientation: 'vertical'
+    canvas:
+        Color:
+            rgb: .3, .3, .9
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    LeftLabel:
+        text: 'naziv: '
+    TextInput:
+        id: ti_naziv
+        hint_text: 'text'
+        multiline: False
+
+    LeftLabel:
+        text: 'oznaka: '
+    TextInput:
+        id: ti_oznaka
+        hint_text: 'text'
+        multiline: False
+
+    LeftLabel:
+        text: 'Cijena: '
+    TextInput:
+        id: ti_cijena
+        hint_text: 'broj'
+        multiline: False
+
+    LeftLabel:
+        text: 'Količina: '
+    TextInput:
+        id: ti_kolicina
+        hint_text: 'broj'
+        multiline: False
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 5
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 5
+        Button:
+            text: 'Create'
+            on_press: root.insert_data()
+        Button:
+            text: 'Exit'
+            on_press: root.back_to_dbw()
+
+<MessagePopup>
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            id: message
+            size_hint: 1, .8
+            Button:
+                text: 'OK'
+                size_hint: 1, .2
+                on_press: root.dismiss()
+
+
+<DataWid>
+    data: ""
+    data_id: ""
+    canvas:
+        Color:
+            rgb: .2, .2, .2
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        text: root.data
+        size_hint_x: .9
+        size_font: self.width * 0.4
+    Button:
+        size_hint_x: .1
+        text: 'Edit'
+        on_press: root.update_data(root.data_id)
+
+<UpdateDataWid>
+    orientation: 'vertical'
+    data_id: ""
+    canvas:
+        Color:
+            rgb: .2, .2, .2
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    LeftLabel:
+        text: "ID:" + root.data_id
+
+    LeftLabel:
+        text: 'naziv: '
+    TextInput:
+        id: ti_naziv
+        hint_text: 'text'
+        multiline: False
+
+    LeftLabel:
+        text: 'oznaka: '
+    TextInput:
+        id: ti_oznaka
+        hint_text: 'text'
+        multiline: False
+
+    LeftLabel:
+        text: 'Cijena: '
+    TextInput:
+        id: ti_cijena
+        hint_text: 'broj'
+        multiline: False
+
+    LeftLabel:
+        text: 'Količina: '
+    TextInput:
+        id: ti_kolicina
+        hint_text: 'broj'
+        multiline: False
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: 5
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 5
+    BoxLayout:
+        Button:
+            text: "potvrda"
+            on_press: root.update_data()
+        Button:
+            text: 'brisanje'
+            on_press: root.delete_data()
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: 5
+        Button:
+            text: 'Exit'
+            on_press: root.back_to_dbw()
