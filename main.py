@@ -186,7 +186,7 @@ class DataWid(BoxLayout):
 
 
 class UpdateDataWid(BoxLayout):
-    def __init__(self, data_id, mainwid, **kwargs):
+    def __init__(self, mainwid, data_id, **kwargs):
         super().__init__(**kwargs)
         self.mainwid = mainwid
         self.data_id = data_id
@@ -195,7 +195,7 @@ class UpdateDataWid(BoxLayout):
     def check_memory(self):
         conn = sqlite3.connect(self.mainwid.DB_PATH)
         cursor = conn.cursor()
-        s = 'SELECT Naziv, Oznaka, Cijena, Kolicina FROM Productos WHERE ID = %s'
+        s = 'SELECT Naziv, Oznaka, Cijena, Kolicina FROM Productos WHERE ID ='
         cursor.execute(s + self.data_id)
         for element in cursor:
             self.ids.ti_naziv.text = str(element[0])
@@ -205,17 +205,43 @@ class UpdateDataWid(BoxLayout):
         conn.close()
 
     def update_data(self):
-        pass
+        conn = sqlite3.connect(self.mainwid.DB_PATH)
+        cursor = conn.cursor()
+
+        d1 = self.ids.ti_naziv.text
+        d2 = self.ids.ti_oznaka.text
+        d3 = self.ids.ti_cijena.text
+        d4 = self.ids.ti_kolicina.text
+
+        a1 = (d1, d2, d3, d4)
+        s1 = 'UPDATE Productos SET'
+        s2 = 'Naziv = "%s", Oznaka = "%s", Cijena = %s, Kolicina = %s' % a1
+        s3 = 'WHERE ID = %s' % self.data_id
+
+        try:
+            cursor.execute(s1 + " " + s2 + " " + s3)
+            conn.commit()
+            conn.close()
+            self.mainwid.goto_database()
+        except Exception as e:
+            print("greška u bazi")
 
     def delete_data(self):
-        pass
+        conn = sqlite3.connect(self.mainwid.DB_PATH)
+        cursor = conn.cursor()
+        s = 'DELETE FROM Productos WHERE ID =' + self.data_id
+
+        cursor.execute(s)
+        conn.commit()
+        conn.close()
+        self.mainwid.goto_database()
 
     def back_to_dbw(self):
         self.mainwid.goto_database()
 
 
 class MainApp(App):
-    title = "jednostavno skladište"
+    title = "Storehouse"
 
     def build(self):
         return MainWid()
